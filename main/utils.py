@@ -9,9 +9,13 @@ LED_PWM = 26
 fan_pwn_freq = 100
 led_pwn_freq = 1
 
-FAN_MAX = 100
-FAN_MIN = 20
+# Power percentage
+FAN_MAX = 80
+FAN_MIN = 0
 fan_power = 0
+
+# Fan activation threshold (temp)
+FAN_THR = 60
 
 GPIO.setwarnings(False) 
 GPIO.setmode(GPIO.BCM)
@@ -194,10 +198,10 @@ def pid_control():
         P = 0.5,
         I = 1,
         D = 1,
-        expect = 50,
+        expect = FAN_THR,
     )
     dc = 100
-    i = 0
+    # i = 0
     while True:
         temp = (float(cpu_temperature())+float(gpu_temperature()))/2.0 
         # print(temp)
@@ -208,7 +212,7 @@ def pid_control():
         # print(dc )
         fan_pwm_pin.ChangeDutyCycle(dc)
         led_pwm_pin.ChangeDutyCycle(dc)
-        i += 1
+        # i += 1
         # time.sleep(1)
 
 # if __name__ == '__main__':
